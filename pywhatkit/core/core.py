@@ -4,11 +4,27 @@ import time
 from platform import system
 from urllib.parse import quote
 from webbrowser import open
-
+import spotify
 import requests
-from pyautogui import click, hotkey, locateOnScreen, moveTo, press, size, typewrite
+from pyautogui import click, hotkey, locateOnScreen, moveTo, press, size, typewrite, write, keyDown , keyUp
 
 from pywhatkit.core.exceptions import InternetException
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+import pyperclip
+
+
+driver = webdriver.Chrome(
+    '/Users/nikhilav/Development/projects/whatsapp/chromedriver_mac_arm64 (1)/chromedriver')
+
+time.sleep(2)
+print("hss")
+
+print("connected")
+driver.get("https://web.whatsapp.com/#")
+time.sleep(20)
+
 
 WIDTH, HEIGHT = size()
 
@@ -58,6 +74,8 @@ def find_link():
         moveTo(location[0] + location[2]/2, location[1] + location[3]/2)
         print(location)
         click()
+
+
 def find_document():
     dir_path = os.path.dirname(os.path.realpath(__file__))
     location = locateOnScreen(f"{dir_path}\\data\\document.png")
@@ -65,12 +83,14 @@ def find_document():
     moveTo(location[0] + location[2]/2, location[1] + location[3]/2)
     click()
 
+
 def find_photo_or_video():
     dir_path = os.path.dirname(os.path.realpath(__file__))
     location = locateOnScreen(f"{dir_path}\\data\\photo_or_video.png")
     print(location)
     moveTo(location[0] + location[2]/2, location[1] + location[3]/2)
     click()
+
 
 def check_connection() -> None:
     """Check the Internet connection of the Host Machine"""
@@ -177,3 +197,56 @@ def send_image(path: str, caption: str, receiver: str, wait_time: int) -> None:
     time.sleep(1)
     findtextbox()
     press("enter")
+
+
+def change_about():
+    print("hss")
+    #element = driver.find_element(By.CLASS_NAME, "_3g4Pn _2HcPg")
+    #elem1 = driver.findElement(By.xpath("//img[@class='_1jLYl _1PAkz _11JPr']"));
+    press('tab',presses=4)
+    press('enter')
+    press('up',presses=2)
+    press('enter')
+    ele = driver.find_element(By.XPATH,"//div[contains(@class,'_199zF _3j691 _3uDlQ')]")
+    ele.click()
+    #imgResults = driver.find_element(By.XPATH,"//img[contains(@class,'_1jLYl _1PAkz _11JPr')]")
+
+    #element = driver.find_element_by_class("_1jLYl _1PAkz _11JPr")
+    #imgResults.click()
+    #click(on_element=)
+    time.sleep(1)
+    #element2 = driver.find_element_by_class("_2wqji")
+
+    while True:
+        ele2 = driver.find_element(By.XPATH,"//button[contains(@title,'Click to edit About')]")
+
+        about = spotify.get_current_play(spotify.SPOTIFY_ACCESS_TOKEN)
+        about_pretty = "Listening to Spotify                                                            {} - {}".format(about['name'],about['artist'])
+        print(about_pretty)
+        pyperclip.copy(about_pretty)
+        ele2.click()
+        time.sleep(1)
+        txtbx = driver.find_element(By.XPATH, "//div[contains(@contenteditable, 'true')]")
+        txtbx.clear()
+
+        """keyDown('command')
+        press('a')
+        keyUp('command')
+        keyDown('command')
+        press('v')
+        keyUp('command')"""
+        #pyperclip.paste()
+        txtbx.send_keys(about_pretty)
+        time.sleep(1)
+        press('enter')
+        time.sleep(10)
+    
+    #driver.quit()
+"""def change_about_to_spotify():
+    song = spotify.curr_play()
+    print(song)
+    change_about(str(song))
+"""
+    
+print("start")
+change_about()

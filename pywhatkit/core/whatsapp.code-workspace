@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"path": "../../../../../../Desktop/chromedriver_mac_arm64"
+		}
+	],
+	"settings": {}
+}
